@@ -87,12 +87,12 @@ double mass(FILE* input){
 
 void AutoTest (void){
     FILE* test;
-    int i;
+    double i;
 
     test = fopen("test.txt", "r");
     i = mass(test);
     fclose(test);
-    if (i == 1){
+    if ((i <= 1) && (i >= 1)){
         printf ("Autotest passed...\n");
     }
     else{
@@ -104,17 +104,16 @@ void AutoTest (void){
 
 
 int main(void){
-    int res = 0;
+    double res = 0;
     FILE* output_file;
     FILE* input;
     input = fopen("text.txt", "r");
     output_file = fopen("data.txt", "w");
     AutoTest();
     res = mass(input);
-    fprintf(output_file,"%d\n",res);
-    printf("%d\n",res);
+    fprintf(output_file,"%lf\n",res);
+    printf("%lf\n",res);
     fclose(input);
     fclose(output_file);
     return 0;
 }
-
