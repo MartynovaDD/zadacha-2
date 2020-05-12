@@ -4,26 +4,24 @@
 #include <ctype.h>
 #include <math.h>
 #include <float.h>
-void AutoTest(void);
-int func(FILE* restrict);
 
-double mass(FILE* input){
-    char a[514];
+double mass(const char *input_file, char *a){
+
     char str[514];
     int k = 0;
     int t = 0;
     int j = 0;
     int m = 0;
     double num = DBL_MAX;
+    FILE* input;
 
-
-    if (!input){
-        printf("Error! Cannot open file !\n");
-        return -1;
+    input = fopen(input_file, "r");
+    if(!input){
+       return -1;
     }
     else{
         if (fgets(str, 514, input)==NULL){
-            printf("Error! No data!\n");
+            printf("No such number\n");
             return -1;
         }
         else{
@@ -54,11 +52,9 @@ double mass(FILE* input){
 
                             str[k]='\0';
                             k=0;
-                            //printf ("%s", str);
                             if(str[0]!='\0'){
                                     if (atoi(str) < num){
                                     num = atoi(str);
-                                    //printf ("%f", num);
                                     }
                             }
                             str[0]='\0';
@@ -74,46 +70,48 @@ double mass(FILE* input){
                 a[0]='\0';
                 j=0;
             }
-            if ((num <= DBL_MAX) && (num >= DBL_MAX)){
-                printf ("No such number\n");
-                    return 404;
-            }
-            else{
-                return num;
-            }
+            return num;
         }
+        fclose(input);
     }
 }
 
-void AutoTest (void){
-    FILE* test;
-    double i;
 
-    test = fopen("test.txt", "r");
-    i = mass(test);
-    fclose(test);
+int AutoTest (void){
+    double i;
+    char a[512];
+    i = mass("test.txt", a);
     if ((i <= 1) && (i >= 1)){
-        printf ("Autotest passed...\n");
+        return 1;
     }
     else{
-        printf("AutoTest failed\n");
+        return -1;
     }
 }
-
 
 
 
 int main(void){
     double res = 0;
-    FILE* output_file;
-    FILE* input;
-    input = fopen("text.txt", "r");
-    output_file = fopen("data.txt", "w");
-    AutoTest();
-    res = mass(input);
-    fprintf(output_file,"%lf\n",res);
-    printf("%lf\n",res);
-    fclose(input);
-    fclose(output_file);
-    return 0;
+    char a[512];
+    FILE* output;
+    output = fopen("data.txt","w");
+    res = AutoTest();
+    if (res == 1){
+        printf("AutoTest  passed...\n");
+    }
+    else{
+        printf("AutoTest failed...\n");
+    }
+    res = mass("text.txt", a);
+    if(res == -1){
+        return -1;
+    }
+    else{
+        printf("%lf\n",res);
+        fprintf(output,"%lf\n",res);
+        return 0;
+    }
+    fclose(output);
 }
+
