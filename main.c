@@ -4,15 +4,17 @@
 #include <ctype.h>
 #include <math.h>
 #include <float.h>
+#include <limits.h>
 
-double mass(const char *input_file, char *a){
+
+int mass(const char *input_file, char *a){
 
     char str[514];
     int k = 0;
     int t = 0;
     int j = 0;
     int m = 0;
-    double num = DBL_MAX;
+    int num = INT_MAX;
     FILE* input;
 
     input = fopen(input_file, "r");
@@ -22,6 +24,7 @@ double mass(const char *input_file, char *a){
     else{
         if (fgets(str, 514, input)==NULL){
             printf("No such number\n");
+            fclose(input);
             return -1;
         }
         else{
@@ -70,18 +73,18 @@ double mass(const char *input_file, char *a){
                 a[0]='\0';
                 j=0;
             }
+            fclose(input);
             return num;
         }
-        fclose(input);
     }
 }
 
 
 int AutoTest (void){
-    double i;
+    int i;
     char a[512];
     i = mass("test.txt", a);
-    if ((i <= 1) && (i >= 1)){
+    if (i == 1){
         return 1;
     }
     else{
@@ -92,7 +95,7 @@ int AutoTest (void){
 
 
 int main(void){
-    double res = 0;
+    int res = 0;
     char a[512];
     FILE* output;
     output = fopen("data.txt","w");
@@ -108,10 +111,9 @@ int main(void){
         return -1;
     }
     else{
-        printf("%lf\n",res);
-        fprintf(output,"%lf\n",res);
+        printf("%d\n",res);
+        fprintf(output,"%d\n",res);
         return 0;
     }
     fclose(output);
 }
-
